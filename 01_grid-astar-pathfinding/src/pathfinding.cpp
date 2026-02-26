@@ -54,15 +54,15 @@ pathfinding::AStarResult pathfinding::FindPath(const Grid& grid, Position start,
     };
 
     std::priority_queue<Node, std::vector<Node>, Compare> openSet;
-
-    int32_t startIndex = grid.Index(start.x, start.y);
-    int32_t goalIndex = grid.Index(goal.x, goal.y);
-
+    
     if (!(grid.InBounds(start.x, start.y) && grid.InBounds(goal.x, goal.y)))
     {
         result.found = false;
         return result;
     }
+
+    int32_t startIndex = grid.Index(start.x, start.y);
+    int32_t goalIndex = grid.Index(goal.x, goal.y);
 
     int32_t h = pathfinding::ManhattanDistance(start, goal);
     state[startIndex] = 1;
