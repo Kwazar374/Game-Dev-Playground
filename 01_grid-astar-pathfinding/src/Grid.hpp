@@ -17,7 +17,7 @@ public:
 
     int32_t Index(int32_t x, int32_t y) const
     {
-        return static_cast<int32_t>(y) * width + x;
+        return static_cast<size_t>(y) * width + x;
     }
 
     bool InBounds(int32_t x, int32_t y) const

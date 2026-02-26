@@ -1,19 +1,20 @@
-#include "pathfinding.hpp"
-#include "Grid.hpp"
 #include <utility>
 #include <vector>
 #include <limits>
 #include <queue>
+#include <array>
+#include "pathfinding.hpp"
+#include "Grid.hpp"
 
-int32_t pathfinding::ManhattanDistance(std::pair<int32_t, int32_t> start, std::pair<int32_t, int32_t> goal) noexcept
+int32_t pathfinding::ManhattanDistance(Position start, Position goal) noexcept
 {
-    int32_t dx = start.first > goal.first ? start.first - goal.first : goal.first - start.first;
-    int32_t dy = start.second > goal.second ? start.second - goal.second : goal.second - start.second;
+    int32_t dx = start.x > goal.x ? start.x - goal.x : goal.x - start.x;
+    int32_t dy = start.y > goal.y ? start.y - goal.y : goal.y - start.y;
 
     return dx + dy;
 }
 
-pathfinding::AStarResult pathfinding::FindPath(const Grid& grid, std::pair<int32_t, int32_t> start, std::pair<int32_t, int32_t> goal)
+pathfinding::AStarResult pathfinding::FindPath(const Grid& grid, Position start, Position goal)
 {
     struct Node
     {
@@ -45,29 +46,35 @@ pathfinding::AStarResult pathfinding::FindPath(const Grid& grid, std::pair<int32
     std::vector<uint8_t> state(N, 0); // 0 unseen, 1 open, 2 closed
     std::vector<int32_t> gScore(N, std::numeric_limits<int32_t>::max());
     std::vector<int32_t> parent(N, -1);
-    std::vector<std::pair<int32_t, int32_t>> neighboursOffsets {
-        std::pair<int32_t, int32_t>(-1, 0),
-        std::pair<int32_t, int32_t>(0, -1),
-        std::pair<int32_t, int32_t>(0, 1),
-        std::pair<int32_t, int32_t>(1, 0),
+    static constexpr std::array<Position, 4> neighboursOffsets {
+        Position(-1, 0),
+        Position(0, -1),
+        Position(0, 1),
+        Position(1, 0),
     };
 
     std::priority_queue<Node, std::vector<Node>, Compare> openSet;
 
-    int32_t startIndex = grid.Index(start.first, start.second);
-    int32_t goalIndex = grid.Index(goal.first, goal.second);
+    int32_t startIndex = grid.Index(start.x, start.y);
+    int32_t goalIndex = grid.Index(goal.x, goal.y);
+
+    if (!(grid.InBounds(start.x, start.y) && grid.InBounds(start.x, start.y)))
+    {
+        result.found = false;
+        return result;
+    }
 
     int32_t h = pathfinding::ManhattanDistance(start, goal);
     state[startIndex] = 1;
     gScore[startIndex] = 0;
-    parent[startIndex] = static_cast<int32_t>(startIndex);
+    parent[startIndex] = startIndex;
     
     // add the start node to open
     openSet.push(
         {
             startIndex,
             gScore[startIndex],
-            gScore[startIndex] + static_cast<int32_t>(h)
+            gScore[startIndex] + h
     });
 
     while (!openSet.empty())
@@ -95,8 +102,8 @@ pathfinding::AStarResult pathfinding::FindPath(const Grid& grid, std::pair<int32
         // for each neighbour
         for (int i = 0; i < 4; ++i)
         {
-            int32_t neighbourX = x + neighboursOffsets[i].first;
-            int32_t neighbourY = y + neighboursOffsets[i].second;
+            int32_t neighbourX = x + neighboursOffsets[i].x;
+            int32_t neighbourY = y + neighboursOffsets[i].y;
             if (!grid.InBounds(neighbourX, neighbourY))
             {
                 continue;
@@ -119,10 +126,10 @@ pathfinding::AStarResult pathfinding::FindPath(const Grid& grid, std::pair<int32
                 gScore[neighbourIndex] = G;
                 parent[neighbourIndex] = static_cast<int32_t>(current.index);
                 state[neighbourIndex] = 1; // open
-                int32_t H = static_cast<int32_t>(pathfinding::ManhattanDistance(
-                    std::pair<int32_t, int32_t>(neighbourX, neighbourY),
+                int32_t H = pathfinding::ManhattanDistance(
+                    Position(neighbourX, neighbourY),
                     goal
-                ));
+                );
                 int32_t F = G + H;
                 openSet.push({neighbourIndex, G, F});
             } 

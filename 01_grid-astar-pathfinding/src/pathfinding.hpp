@@ -1,7 +1,9 @@
 #pragma once
-#include "Grid.hpp" 
+
 #include <utility>
 #include <vector>
+#include "Grid.hpp" 
+#include "Position.hpp"
 
 namespace pathfinding {
     struct AStarResult
@@ -11,6 +13,6 @@ namespace pathfinding {
         std::vector<uint8_t> path;
     };
 
-    [[nodiscard]] AStarResult FindPath(const Grid& grid, std::pair<int32_t, int32_t> start, std::pair<int32_t, int32_t> goal);
-    [[nodiscard]] int32_t ManhattanDistance(std::pair<int32_t, int32_t> start, std::pair<int32_t, int32_t> goal) noexcept;
+    [[nodiscard]] AStarResult FindPath(const Grid& grid, Position start, Position goal);
+    [[nodiscard]] int32_t ManhattanDistance(Position start, Position goal) noexcept;
 }

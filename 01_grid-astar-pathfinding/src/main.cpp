@@ -1,8 +1,9 @@
-#include "Grid.hpp"
-#include "grid_ops.hpp"
 #include <iostream>
 #include <utility>
+#include "Grid.hpp"
+#include "grid_ops.hpp"
 #include "pathfinding.hpp"
+#include "Position.hpp"
 
 int main()
 {
@@ -10,11 +11,11 @@ int main()
     grid_ops::FillRandom(grid, 0.15, 42);
     grid_ops::FillBorders(grid);
 
-    std::pair<int32_t, int32_t> start {5, 5};
-    std::pair<int32_t, int32_t> goal {90, 80};
+    Position start {5, 5};
+    Position goal {90, 80};
 
-    grid.SetWall(start.first, start.second, false);
-    grid.SetWall(goal.first, goal.second, false);
+    grid.SetWall(start.x, start.y, false);
+    grid.SetWall(goal.x, goal.y, false);
 
     auto result = pathfinding::FindPath(grid, start, goal);
     

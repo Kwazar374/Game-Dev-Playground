@@ -1,7 +1,8 @@
-#include "grid_ops.hpp"
 #include <fstream>
 #include <random>
 #include <cassert>
+#include "grid_ops.hpp"
+#include "Position.hpp"
 
 void grid_ops::FillBorders(Grid& grid)
 {
@@ -18,7 +19,7 @@ void grid_ops::FillBorders(Grid& grid)
     }
 }
 
-void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, std::pair<int32_t, int32_t> start, std::pair<int32_t, int32_t> goal)
+void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, Position start, Position goal)
 {
     std::ofstream out(file_path);
     if (!out)
@@ -37,7 +38,7 @@ void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, 
     }
 }
 
-void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, std::pair<int32_t, int32_t> start, std::pair<int32_t, int32_t> goal, const std::string& debug_file_path, const std::vector<uint8_t>& closed, const std::vector<uint8_t>& path)
+void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, Position start, Position goal, const std::string& debug_file_path, const std::vector<uint8_t>& closed, const std::vector<uint8_t>& path)
 {
     assert((int32_t)closed.size() == grid.Width() * grid.Height());
     assert((int32_t)path.size() == grid.Width() * grid.Height());
@@ -51,7 +52,7 @@ void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, 
     }
 
     out << grid.Width() << " " << grid.Height() << " ";
-    out << start.first << " " << start.second << " " << goal.first << " " << goal.second << "\n";
+    out << start.x << " " << start.y << " " << goal.x << " " << goal.y << "\n";
 
     for (auto x : closed)
     {

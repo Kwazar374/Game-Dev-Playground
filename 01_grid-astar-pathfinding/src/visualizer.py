@@ -18,7 +18,7 @@ with open(pathfinding_path, "r") as f:
 root = tk.Tk()
 
 width = 750
-height = 750
+height = 7501
 
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
