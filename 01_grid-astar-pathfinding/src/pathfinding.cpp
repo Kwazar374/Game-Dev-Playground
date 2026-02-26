@@ -58,7 +58,7 @@ pathfinding::AStarResult pathfinding::FindPath(const Grid& grid, Position start,
     int32_t startIndex = grid.Index(start.x, start.y);
     int32_t goalIndex = grid.Index(goal.x, goal.y);
 
-    if (!(grid.InBounds(start.x, start.y) && grid.InBounds(start.x, start.y)))
+    if (!(grid.InBounds(start.x, start.y) && grid.InBounds(goal.x, goal.y)))
     {
         result.found = false;
         return result;
@@ -124,7 +124,7 @@ pathfinding::AStarResult pathfinding::FindPath(const Grid& grid, Position start,
             if (G < gScore[neighbourIndex])
             {
                 gScore[neighbourIndex] = G;
-                parent[neighbourIndex] = static_cast<int32_t>(current.index);
+                parent[neighbourIndex] = current.index;
                 state[neighbourIndex] = 1; // open
                 int32_t H = pathfinding::ManhattanDistance(
                     Position(neighbourX, neighbourY),
