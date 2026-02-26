@@ -11,6 +11,6 @@ namespace pathfinding {
         std::vector<uint8_t> path;
     };
 
-    [[nodiscard]] AStarResult FindPath(const Grid& grid, std::pair<size_t, size_t> start, std::pair<size_t, size_t> goal);
-    [[nodiscard]] size_t ManhattanDistance(std::pair<size_t, size_t> start, std::pair<size_t, size_t> goal) noexcept;
+    [[nodiscard]] AStarResult FindPath(const Grid& grid, std::pair<int32_t, int32_t> start, std::pair<int32_t, int32_t> goal);
+    [[nodiscard]] int32_t ManhattanDistance(std::pair<int32_t, int32_t> start, std::pair<int32_t, int32_t> goal) noexcept;
 }

@@ -1,6 +1,6 @@
 #include "Grid.hpp"
 
-bool Grid::IsWall(size_t x, size_t y) const
+bool Grid::IsWall(int32_t x, int32_t y) const
 {
     if (InBounds(x, y))
     {
@@ -12,7 +12,7 @@ bool Grid::IsWall(size_t x, size_t y) const
     }
 }
 
-void Grid::SetWall(size_t x, size_t y, bool wall)
+void Grid::SetWall(int32_t x, int32_t y, bool wall)
 {
     if (InBounds(x, y))
     {

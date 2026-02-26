@@ -3,7 +3,16 @@ import tkinter as tk
 path = "./grid.txt"
 with open(path, "r") as f:
     grid_width, grid_height, start_x, start_y, goal_x, goal_y = [int(x) for x in f.readline().split()]
-    rows = [row.strip() for row in f]
+    rows = [row.rstrip("\n") for row in f]
+
+debug_path = "./pathfinding.txt"
+with open(debug_path, "r") as f:
+    dgrid_width, dgrid_height, dstart_x, dstart_y, dgoal_x, dgoal_y = [int(x) for x in f.readline().split()]
+    closed = [int(x) for x in f.readline().split()]
+    path = [int(x) for x in f.readline().split()]
+
+    assert len(closed) == grid_width * grid_height
+    assert len(path) == grid_width * grid_height
 
 root = tk.Tk()
 
@@ -35,7 +44,13 @@ canvas.pack(expand = "true")
 
 for y, row in enumerate(rows):
     for x, cell in enumerate(row):
-        color = "black" if cell == "#" else "white"
+        index = y * grid_width + x
+        if cell == "#":
+            color = "black"
+        else:
+            color = "white"
+            if closed[index] == 1: color = "cyan2"
+            if path[index] == 1: color = "blue2"
 
         x1 = x * cell_size
         y1 = y * cell_size
@@ -45,7 +60,7 @@ for y, row in enumerate(rows):
         canvas.create_rectangle(
             x1, y1, x2, y2,
             fill = color,
-            outline = "gray"
+            outline = "whitesmoke"
         )
 
 print(start_x, start_y)
@@ -53,13 +68,13 @@ print(start_x, start_y)
 canvas.create_rectangle(
     start_x * cell_size, start_y * cell_size, start_x * cell_size + cell_size, start_y * cell_size + cell_size,
     fill="green2",
-    outline="gray"
+    outline="whitesmoke"
 )
 
 canvas.create_rectangle(
     goal_x * cell_size, goal_y * cell_size, goal_x * cell_size + cell_size, goal_y * cell_size + cell_size,
     fill="red",
-    outline="gray"
+    outline="whitesmoke"
 )
 
 root.mainloop()
