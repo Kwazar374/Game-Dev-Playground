@@ -11,7 +11,7 @@ int main()
     grid_ops::FillBorders(grid);
 
     std::pair<int32_t, int32_t> start {5, 5};
-    std::pair<int32_t, int32_t> goal {90, 80};
+    std::pair<int32_t, int32_t> goal {90, 95};
 
     grid.SetWall(start.first, start.second, false);
     grid.SetWall(goal.first, goal.second, false);

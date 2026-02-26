@@ -26,8 +26,7 @@ void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, 
         return;
     }
 
-    out << grid.Width() << " " << grid.Height() << " ";
-    out << start.first << " " << start.second << " " << goal.first << " " << goal.second << "\n";
+    out << grid.Width() << " " << grid.Height() << "\n";
     for (int32_t y = 0; y < grid.Height(); ++y)
     {
         for (int32_t x = 0; x < grid.Width(); ++x)
@@ -59,6 +58,7 @@ void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, 
         out << int(x) << " ";
     }
     out << "\n";
+
     for (auto x : path)
     {
         out << int(x) << " ";
