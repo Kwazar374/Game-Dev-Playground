@@ -4,6 +4,7 @@
 #include "grid_ops.hpp"
 #include "Position.hpp"
 
+// Function to fill the borders of the grid with walls
 void grid_ops::FillBorders(Grid& grid)
 {
     for (int32_t x = 0; x < grid.Width(); ++x)
@@ -11,7 +12,7 @@ void grid_ops::FillBorders(Grid& grid)
         grid.SetWall(x, 0, true);
         grid.SetWall(x, grid.Height() - 1, true);
     }
-
+    
     for (int32_t y = 1; y < grid.Height() - 1; ++y)
     {
         grid.SetWall(0, y, true);
@@ -19,6 +20,23 @@ void grid_ops::FillBorders(Grid& grid)
     }
 }
 
+// Function to fill the grid with random walls based on a given density and seed for reproducibility
+void grid_ops::FillRandom(Grid& grid, float density, uint32_t seed)
+{
+    assert(density >= 0.0f && density <= 1.0f);
+    std::mt19937 rng(seed);
+    std::bernoulli_distribution wall_distribution(density); // 
+
+    for (int32_t y = 0; y < grid.Height(); ++y)
+    {
+        for (int32_t x = 0; x < grid.Width(); ++x)
+        {
+            grid.SetWall(x, y, wall_distribution(rng));
+        }
+    }
+}
+
+// Function to fill the grid with random walls based on a given density and seed for reproducibility
 void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, Position start, Position goal)
 {
     std::ofstream out(file_path);
@@ -38,6 +56,7 @@ void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, 
     }
 }
 
+// Overloaded function to export the grid and additional debug information about the pathfinding process (closed nodes and the final path) to a text file
 void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, Position start, Position goal, const std::string& debug_file_path, const std::vector<uint8_t>& closed, const std::vector<uint8_t>& path)
 {
     assert((int32_t)closed.size() == grid.Width() * grid.Height());
@@ -65,20 +84,4 @@ void grid_ops::ExportToTextFile(const Grid& grid, const std::string& file_path, 
         out << int(x) << " ";
     }
     out << "\n";
-}
-
-
-void grid_ops::FillRandom(Grid& grid, float density, uint32_t seed)
-{
-    assert(density >= 0.0f && density <= 1.0f);
-    std::mt19937 rng(seed);
-    std::bernoulli_distribution wall_distribution(density);
-
-    for (int32_t y = 0; y < grid.Height(); ++y)
-    {
-        for (int32_t x = 0; x < grid.Width(); ++x)
-        {
-            grid.SetWall(x, y, wall_distribution(rng));
-        }
-    }
 }

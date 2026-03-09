@@ -1,5 +1,6 @@
 #include "Grid.hpp"
 
+// Function to check if the cell at given coordinates is a wall
 bool Grid::IsWall(int32_t x, int32_t y) const
 {
     if (InBounds(x, y))
@@ -12,6 +13,7 @@ bool Grid::IsWall(int32_t x, int32_t y) const
     }
 }
 
+// Function to set the wall state of a cell at given coordinates
 void Grid::SetWall(int32_t x, int32_t y, bool wall)
 {
     if (InBounds(x, y))

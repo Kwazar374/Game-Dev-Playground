@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 #include <utility>
 #include "Grid.hpp"
 #include "grid_ops.hpp"
@@ -34,9 +35,12 @@ int main()
     // Run the A* pathfinding algorithm and get the result
     auto result = pathfinding::FindPath(grid, start, goal);
     
+    // Create the output directory if it doesn't exist
+    std::filesystem::create_directories("../out");
+
     // Export the grid, start and goal positions, and the results of the pathfinding algorithm to text files for visualization
-    grid_ops::ExportToTextFile(grid ,"./grid.txt", start, goal,
-        "./pathfinding.txt", result.closed, result.path);
+    grid_ops::ExportToTextFile(grid ,"../out/grid.txt", start, goal,
+        "../out/pathfinding.txt", result.closed, result.path);
 
     // Print the result of the pathfinding algorithm to the console
     std::cout << (result.found ? "PATH FOUND\n" : "NO PATH\n");

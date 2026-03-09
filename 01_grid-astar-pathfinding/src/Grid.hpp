@@ -4,10 +4,11 @@
 #include <vector>
 #include <cassert>
 
+// The Grid class represents a 2D grid for pathfinding, where each cell can be either a wall or an open space
 class Grid
 {
 public:
-    // constructor
+    // Constructor
     Grid(int32_t width, int32_t height) : 
         width{width}, height{height}, cells(width * height) 
     {
@@ -15,20 +16,24 @@ public:
         assert(width * height <= cells.max_size());
     }
 
+    // Function to convert 2D coordinates to a 1D index for the cells vector
     int32_t Index(int32_t x, int32_t y) const
     {
         assert(InBounds(x, y));
         return y * width + x;
     }
 
+    // Function to check if the given coordinates are within the bounds of the grid
     bool InBounds(int32_t x, int32_t y) const
     {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
+    // Functions to get and set the wall state of a cell at given coordinates
     bool IsWall(int32_t x, int32_t y) const;
     void SetWall(int32_t x, int32_t y, bool wall);
 
+    // Getters for Width and Height of the grid
     int32_t Width() const
     {
         return width;
