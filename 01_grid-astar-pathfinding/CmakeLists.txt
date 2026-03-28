@@ -1,0 +1,79 @@
+cmake_minimum_required(VERSION 3.20)
+
+project(GridAStarPathfinding
+    VERSION 1.0.0
+    DESCRIPTION "Grid-based A* pathfinding demo with Python visualizer"
+    LANGUAGES CXX
+)
+
+# Global settings
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+endif()
+
+# Sources
+set(SOURCES
+    src/main.cpp
+    src/Grid.cpp
+    src/grid_ops.cpp
+    src/pathfinding.cpp
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/src
+)
+
+# Compiler warnings
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    target_compile_options(${PROJECT_NAME}
+        PRIVATE
+            -Wall
+            -Wextra
+            -Wpedantic
+    )
+elseif(MSVC)
+    target_compile_options(${PROJECT_NAME}
+        PRIVATE
+            /W4
+    )
+endif()
+
+# Output directories
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+# Helper targets
+
+# Run the C++ demo
+add_custom_target(run
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/out
+    COMMAND $<TARGET_FILE:${PROJECT_NAME}>
+    DEPENDS ${PROJECT_NAME}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Building and running the C++ application"
+)
+
+# Run the Python visualizer
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+
+add_custom_target(visualize
+    COMMAND ${Python3_EXECUTABLE} visualizer.py
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
+    COMMENT "Running the Python visualizer"
+)
+
+# Full pipeline: build -> run -> visualize
+add_custom_target(demo
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target run
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target visualize
+    DEPENDS ${PROJECT_NAME}
+    COMMENT "Running full demo pipeline"
+)

@@ -4,6 +4,13 @@
 # Allow directories
 !*/
 
+# ignore build and output directories
+*/build/
+*/out/
+
+# Allow CMakeLists.txt 
+!CMakeLists.txt
+
 # Allow source code
 !*.cpp
 !*.hpp
