@@ -65,7 +65,7 @@ else:
             else:
                 color = "white"
                 if closed[index] == 1: color = "cyan2"
-                if path[index] == 1: color = "orange"
+                if path[index] == 1: color = "deep pink"
 
             x1 = x * cell_size
             y1 = y * cell_size
